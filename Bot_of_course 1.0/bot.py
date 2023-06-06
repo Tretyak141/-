@@ -4,7 +4,7 @@ from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove,KeyboardButto
 import datetime
 
 
-tok = '6105839706:AAGNCmL4kfDXFu4K31Pgg0Ui2qT-KDoxs4s'
+tok = '***'
 bot = Bot(token=tok)
 dp = Dispatcher(bot)
 

@@ -4,7 +4,7 @@ import os
 
 
 
-tok = '5755748230:AAHHZIt-AM69H3S3nC94v26UpZ0B7ljPlJE'
+tok = '****'
 bot = Bot(token=tok)
 dp = Dispatcher(bot)
 
