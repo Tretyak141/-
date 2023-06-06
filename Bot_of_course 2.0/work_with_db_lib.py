@@ -3,24 +3,21 @@ import PIL as p
 import logs 
 
 
-async def group(chat_id):
+def group(chat_id):
     conn = sql.connect('students.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM students_base")
-    database = cur.fetchall()
+    cur.execute(f"SELECT * FROM students_base WHERE userid={str(chat_id)};")
+    database = cur.fetchone()
     conn.close()
-    flag = 0
-    for i in range(411):
-        if database[i][0]==chat_id:
-            flag = database[i][1]
+    flag = database[1]
     
     return flag
 
-async def monday(chat_id):
+def monday(chat_id):
     st_group = group(chat_id)
     conn = sql.connect(f'rasp/{st_group}.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM monday")
+    cur.execute("SELECT * FROM monday;")
     res = cur.fetchone()
     conn.close()
     s = ''
@@ -30,11 +27,11 @@ async def monday(chat_id):
         j+=1
     return s
 
-async def tuesday(chat_id):
+def tuesday(chat_id):
     st_group = group(chat_id)
     conn = sql.connect(f'rasp/{st_group}.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM tuesday")
+    cur.execute("SELECT * FROM tuesday;")
     res = cur.fetchone()
     conn.close()
     j = 0
@@ -42,11 +39,11 @@ async def tuesday(chat_id):
         s += f"{i +': ' + res[j]}\n"
     return s
 
-async def wednesday(chat_id):
+def wednesday(chat_id):
     st_group = group(chat_id)
     conn = sql.connect(f'rasp/{st_group}.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM wednesday")
+    cur.execute("SELECT * FROM wednesday;")
     res = cur.fetchone()
     conn.close()
     j = 0
@@ -54,11 +51,11 @@ async def wednesday(chat_id):
         s += f"{i +': ' + res[j]}\n"
     return s
 
-async def thursday(chat_id):
+def thursday(chat_id):
     st_group = group(chat_id)
     conn = sql.connect(f'rasp/{st_group}.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM thursday")
+    cur.execute("SELECT * FROM thursday;")
     res = cur.fetchone()
     conn.close()
     j = 0
@@ -66,24 +63,11 @@ async def thursday(chat_id):
         s += f"{i +': ' + res[j]}\n"
     return s
 
-async def friday(chat_id):
+def friday(chat_id):
     st_group = group(chat_id)
     conn = sql.connect(f'rasp/{st_group}.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM friday")
-    res = cur.fetchone()
-    conn.close()
-    conn.close()
-    j = 0
-    for i in ('8:45-10:20', "10:30-12:05", "12:50-14:25", "14:35-16:10", "16:20-17:55"):
-        s += f"{i +': ' + res[j]}\n"
-    return s
-
-async def saturday(chat_id):
-    st_group = group(chat_id)
-    conn = sql.connect(f'rasp/{st_group}.db')
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM saturday")
+    cur.execute("SELECT * FROM friday;")
     res = cur.fetchone()
     conn.close()
     conn.close()
@@ -92,15 +76,26 @@ async def saturday(chat_id):
         s += f"{i +': ' + res[j]}\n"
     return s
 
-async def marks(chat_id):
+def saturday(chat_id):
+    st_group = group(chat_id)
+    conn = sql.connect(f'rasp/{st_group}.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM saturday;")
+    res = cur.fetchone()
+    conn.close()
+    conn.close()
+    j = 0
+    for i in ('8:45-10:20', "10:30-12:05", "12:50-14:25", "14:35-16:10", "16:20-17:55"):
+        s += f"{i +': ' + res[j]}\n"
+    return s
+
+def marks(chat_id):
     conn = sql.connect('students.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM students_marks")
-    database = cur.fetchall()
+    cur.execute(f"SELECT * FROM students_marks WHERE user_id={str(chat_id)};")
+    database = cur.fetchone()
     conn.close()
-    for i in range(411):
-        if database[i][0]==chat_id:
-            res = database[i]
+    res = database
     s = ''
     middle_with = 0
     middle_without = 0
@@ -176,7 +171,7 @@ async def marks(chat_id):
 
     return s
 
-async def registered(chat_id):
+def registered(chat_id):
     conn = sql.connect('registered.db')
     cur = conn.cursor()
     database = cur.fetchall()
@@ -185,24 +180,24 @@ async def registered(chat_id):
         conn.commit()
     conn.close()
 
-async def admin(chat_id):
+def admin(chat_id):
     conn = sql.connect('admins.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM admins")
+    cur.execute("SELECT * FROM admins;")
 
     admins = cur.fetchall()
     conn.close()
     return (admins.count(chat_id)>0)
 
-async def all_registered():
+def all_registered():
     conn = sql.connect('registered.db')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM regs")
+    cur.execute("SELECT * FROM regs;")
     admins = cur.fetchall()
     conn.close()
     return admins
 
-async def homeworks_view(chat_id,mess):
+def homeworks_view(chat_id,mess):
     check = logs.check(chat_id)
     gr = group(chat_id)
     if check=='change':
@@ -210,13 +205,13 @@ async def homeworks_view(chat_id,mess):
         return 0
     conn = sql.connect(f'{mess}.db')
     cur = conn.cursor()
-    cur.execute(f"SELECT * FROM {str(group(chat_id))}")
+    cur.execute(f"SELECT * FROM {str(group(chat_id))};")
     f = str(cur.fetchall())
     l = f[len(f)-1]
     conn.close()
     return l
 
-async def homeworks_write(chat_id, mess_id):
+def homeworks_write(chat_id, mess_id):
     ch = logs.check(chat_id)
     conn = sql.connect(f'{ch}.db')
     cur = conn.cursor()

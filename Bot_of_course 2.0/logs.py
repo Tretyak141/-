@@ -1,5 +1,5 @@
-async def check(chat_id):
-    file = open(f'logs{chat_id}.txt')
+def check(chat_id):
+    file = open(f'logs/{chat_id}.txt')
     info = file.readline()
     file.close()
     file = open(f'logs{chat_id}.txt','w+')
@@ -7,7 +7,7 @@ async def check(chat_id):
     file.close()
     return info
 
-async def write(chat_id,text):
-    file = open(f'logs{chat_id}.txt','w+')
+def write(chat_id,text):
+    file = open(f'logs/{chat_id}.txt','w+')
     file.write(text)
     file.close()
